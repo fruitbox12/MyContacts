@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[contact_email_addresses]
+﻿CREATE TABLE [dbo].[contacts_email_addresses]
 (
 	[id] INT NOT NULL PRIMARY KEY, 
     [contact_id] INT NOT NULL, 
@@ -10,4 +10,4 @@
 
 GO
 
-CREATE UNIQUE INDEX [IX_contact_email] ON [dbo].[contact_email_addresses] ([email_id])
+CREATE UNIQUE INDEX [IX_contact_email] ON [dbo].[contacts_email_addresses] ([email_id])

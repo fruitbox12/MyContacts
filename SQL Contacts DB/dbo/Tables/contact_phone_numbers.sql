@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[contact_phone_numbers]
+﻿CREATE TABLE [dbo].[contacts_phone_numbers]
 (
 	[id] INT NOT NULL PRIMARY KEY IDENTITY, 
     [contact_id] INT NOT NULL, 
@@ -9,5 +9,5 @@
 
 GO
 
-CREATE UNIQUE INDEX [IX_contact_phone_numbers] ON [dbo].[contact_phone_numbers] ([phone_number_id])
+CREATE UNIQUE INDEX [IX_contact_phone_numbers] ON [dbo].[contacts_phone_numbers] ([phone_number_id])
  

@@ -8,6 +8,6 @@ namespace DataAccessLibrary.Models
     {
 
         public int id { get; set; }
-        public string EmailAdress { get; set; } = "";
+        public string EmailAddress { get; set; } = "";
     }
 }

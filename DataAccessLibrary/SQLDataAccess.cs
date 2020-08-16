@@ -25,7 +25,7 @@ namespace ASP.NET_Console_Project
 
         public List<T> Read<T, U>(string sqlStatement, U parameters)
         {
-            return DapperGet<T, U>(sqlStatement, parameters);
+            return DapperRead<T, U>(sqlStatement, parameters);
         }
 
         // Dapper Micro ORM
@@ -45,7 +45,7 @@ namespace ASP.NET_Console_Project
         }
 
 
-        private List<T> DapperGet<T, U>(string sqlStatement, U parameters)
+        private List<T> DapperRead<T, U>(string sqlStatement, U parameters)
         {
 
             using (IDbConnection connection = new SqlConnection(_connectionString))

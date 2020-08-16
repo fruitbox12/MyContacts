@@ -42,4 +42,18 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="email_address" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="b954a0e5-3e49-41bb-8120-1bf0d2ff7071" ChangeDateTime="08/16/2020 21:58:42">
+    <Property Name="ElementName" Value="[dbo].[contact_email_addresses]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[contacts_email_addresses]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="f9e5613d-ac39-43e8-b8ed-7ebf815e2486" ChangeDateTime="08/16/2020 21:59:15">
+    <Property Name="ElementName" Value="[dbo].[contact_phone_numbers]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[contacts_phone_numbers]" />
+  </Operation>
 </Operations>

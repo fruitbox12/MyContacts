@@ -1,4 +1,5 @@
-﻿using DataAccessLibrary.Models;
+﻿using DataAccessLibrary;
+using DataAccessLibrary.Models;
 using System;
 using System.Collections.Generic;
 
@@ -19,20 +20,32 @@ namespace ASP.NET_Console_Project
 
         public void DisplayMainMenu()
         {
+            string option = "";
             int menuOption = 0;
             while (menuOption != 99)
             {
-                Console.WriteLine("Main Menu\n");
+                Console.Write("Enter your Menu option: ");
                 Console.WriteLine("1.\tDisplay Contact List");
                 Console.WriteLine("2.\tDisplay Contact List Alphabetically");
+                Console.WriteLine("3.\tDisplay Contact List ID order");
+
                 Console.WriteLine("99.\tExit");
 
-                Console.WriteLine("\nEnter your Menu option: ");
+                Console.WriteLine("\nEnter your Menu option: -or- Press Enter to Exit ");
 
                 try
                 {
-                    menuOption = Int32.Parse(Console.ReadLine());
+                    option = Console.ReadLine();
+                    if (option.Length > 0)
+                    {
+                        menuOption = Int32.Parse(option);
+                    }
+                    else
+                    {
+                        menuOption = 99;
+                    }
                 }
+
                 catch (FormatException e)
                 {
                     menuOption = 0;
@@ -45,7 +58,12 @@ namespace ASP.NET_Console_Project
                     case 2:
                         DisplayContactsAlphabetically();
                         break;
+
+                    case 3:
+                       DisplayContactsById();
+                        break;
                     case 99:
+                        Console.WriteLine("\nExiting \n");
                         break;
                     default:
                         Console.WriteLine("\nInvalid Menu Option\n");
@@ -60,7 +78,7 @@ namespace ASP.NET_Console_Project
             Console.WriteLine("\nContact List");
 
 
-            List<DataAccessLibrary.BasicContactModel> rows = _contacts.GetBasicContacts();
+            List<BasicContactModel> rows = _contacts.GetBasicContacts();
 
             if (rows.Count > 0)
             {
@@ -98,7 +116,47 @@ namespace ASP.NET_Console_Project
         {
             Console.WriteLine("\nContacts in Alphabetical Order");
 
+            List<ContactModel> contactModels = _contacts.GetContacts();
 
+
+
+
+            if (contactModels.Count > 0)
+            {
+                Console.WriteLine("{0, -5:D} {1,15:S} {2,15:S} {3,15:S}", "Id", "First Name", "Middle Name", "Last Name", "Email Address");
+                foreach (var contactModel in contactModels)
+                {
+                    Console.WriteLine("{0, -5:D} {1,15:S} {2,15:S} {3,15:S}" , contactModel.BasicContactModel.Id, contactModel.BasicContactModel.FirstName,
+                        contactModel.BasicContactModel.MiddleName, contactModel.BasicContactModel.LastName);
+
+                    if (contactModel.EmailAddress.Count > 0)
+                    {
+                        Console.WriteLine($"\n\t\t EmailAddresses \n");
+
+                        foreach (var emailAddressModel in contactModel.EmailAddress)
+                        {
+                            Console.WriteLine($"\t\t { emailAddressModel.EmailAddress} ");
+                        }
+                    }
+
+                    if (contactModel.PhoneNumber.Count > 0)
+                    {
+                        Console.WriteLine($"\n\t\t Phone Numbers \n");
+
+                        foreach (var phoneNumberModel in contactModel.PhoneNumber)
+                        {
+                            Console.WriteLine($"\t\t{ phoneNumberModel.PhoneNumber}");
+                            Console.WriteLine();
+
+
+
+                        }
+                        Console.WriteLine();
+
+                    }
+
+                }
+            }
             int numberOfContacts = _contacts.GetNumberOfContacts();
 
             if (numberOfContacts > 0)
@@ -112,6 +170,22 @@ namespace ASP.NET_Console_Project
             }
             Console.WriteLine();
         }
+        private void DisplayContactsById()
+        {
+            Console.WriteLine("\nContacts in Id Order\n");
+
+            List<ContactModel> contactModels = _contacts.GetContactsById();
+            foreach(var contactModel in contactModels)
+            {
+                Console.WriteLine("{0, -5:D} {1,15:S} {2,15:S} {3,15:S}", contactModel.BasicContactModel.Id, contactModel.BasicContactModel.FirstName,
+                        contactModel.BasicContactModel.MiddleName, contactModel.BasicContactModel.LastName);
+                Console.WriteLine();
+
+
+            }
+        }
+
     }
+
 
 }
