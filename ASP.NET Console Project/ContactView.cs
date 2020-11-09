@@ -765,7 +765,7 @@ namespace ASP.NET_Console_Project
            
             BasicContactModel basicContactModel = new BasicContactModel();
 
-            //input basic contact model
+            ///input basic contact model
             Console.WriteLine("\nAdd Basic Contact  -press enter three times to exit- \n");
 
           string firstName = "";
