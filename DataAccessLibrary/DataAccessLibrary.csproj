@@ -11,6 +11,10 @@
     <PackageReference Include="System.Data.SqlClient" Version="4.8.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\AppSettings\AppSettings.csproj" />
+  </ItemGroup>
+
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="https://json.schemastore.org/babelrc" /></VisualStudio></ProjectExtensions>
 
 </Project>

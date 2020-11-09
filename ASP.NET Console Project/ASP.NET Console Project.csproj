@@ -7,13 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DataAccessLibrary\DataAccessLibrary.csproj" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.9" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.9" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="appsettings.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <ProjectReference Include="..\AppSettings\AppSettings.csproj" />
+    <ProjectReference Include="..\SQLContactsLibrary\SQLContactsLibrary.csproj" />
   </ItemGroup>
 
 </Project>

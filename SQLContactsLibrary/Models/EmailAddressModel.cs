@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace DataAccessLibrary.Models
+namespace SQLContactsLibrary.Models
 {
    public class EmailAddressModel
     {
