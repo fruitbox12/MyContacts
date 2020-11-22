@@ -249,7 +249,9 @@ namespace SQLContactsLibrary
                                                                                             FirstName = basicContactModel.FirstName,
                                                                                             MiddleName = basicContactModel.MiddleName,
                                                                                             LastName = basicContactModel.LastName
+                                                                                       
                                                                                         });
+
             resultSet.Result.Id = createResultSet.Result;
             resultSet.Merge(createResultSet);
 
@@ -269,7 +271,36 @@ namespace SQLContactsLibrary
             return resultSet;
 
         }
+        public ResultSet<int> AddEmailAddress(EmailAddressModel emailAddressModel)
+        {
+            ResultSet<int> resultSet = new ResultSet<int>();
 
+            //Valid Names are not all blank
+            if (emailAddressModel.EmailAddress.Length > 0 )
+            {
+
+                string sqlStatement = @"INSERT INTO dbo.email_addresses (email_address)
+                                    VALUES (@EmailAddress);";
+
+
+                ResultSet<int> addResultSet = _dataAccess.Create<EmailAddressModel, dynamic>(sqlStatement,new{EmailAddress = emailAddressModel.EmailAddress});
+            
+            }
+            else
+            {
+                resultSet.LogicalError = true;
+                Trace trace = new Trace();
+                trace.ErrorType = Trace.ErrorTypes.Logical;
+                trace.ClassName = "AddEmailAddress";
+                trace.MemberName = "AddBasicContacts()";
+                trace.ErrorMessages.Add("Error Message: One of 'First Name' or 'Last Name' must be entered");
+                resultSet.Traces.Add(trace);
+
+            }
+
+            return resultSet;
+
+        }
 
 
 

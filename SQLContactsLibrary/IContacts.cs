@@ -21,5 +21,6 @@ namespace SQLContactsLibrary
         ResultSet<List<BasicContactModel>> SearchBasicContactsByName(string firstName, string lastName);
         ResultSet<List<EmailAddressModel>> SearchEmail(string emailAddress);
         ResultSet<List<PhoneNumberModel>> SearchPhoneNumbers(string phoneNumber);
+        ResultSet<int> AddEmailAddress(EmailAddressModel emailAddressModel);
     }
 }

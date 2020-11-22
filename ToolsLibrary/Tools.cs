@@ -4,7 +4,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 namespace ToolsLibrary
 {
-    class Tools
+    public class Tools
     {
         public static bool ValidateEmailAddressCharacters(string emailAddress)
         {
@@ -34,6 +34,30 @@ namespace ToolsLibrary
 
 
             return phoneNumber.Length == 10;
+        }
+
+        public static string InvalidEmailCharacter
+        {
+            get
+            {
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.Append("Email Address containts invalid character(s).\n");
+                stringBuilder.Append("Valid characters: underscore a-z A-Z 0-9 dash period @");
+                return stringBuilder.ToString();
+            }
+        }
+        public static string InvalidEmailFormat
+        {
+            get
+            {
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.Append("Invalid Email Address format entered. Valid format:\n");
+                stringBuilder.Append("Email userid: at least one character followed by @\n");
+                stringBuilder.Append("Email domain name: at least one character followed by period\n");
+                stringBuilder.Append("Top-level domain name: at least two characters\n");
+                stringBuilder.Append("Minimal example: j@a.co");
+                return stringBuilder.ToString();
+            }
         }
     }
 }

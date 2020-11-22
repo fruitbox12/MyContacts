@@ -4,6 +4,7 @@ using SQLContactsLibrary.Models;
 using System;
 using Settings;
 using System.Collections.Generic;
+using ToolsLibrary;
 namespace ASP.NET_Console_Project
 {
     public class ContactView
@@ -505,7 +506,7 @@ namespace ASP.NET_Console_Project
                     {
                         foreach (var emailAddress in emailResultSet.Result)
                         {
-                            ResultSet<BasicContactModel> basicContactResultSet = _contacts.GetBasicContactByEmail(emailAddress.id);
+                            ResultSet<BasicContactModel> basicContactResultSet = _contacts.GetBasicContactByEmail(emailAddress.Id);
                             if (basicContactResultSet.Result.Id > 0)
                             {
 
@@ -676,9 +677,11 @@ namespace ASP.NET_Console_Project
         }
         private void addContact()
         {
-
-            AddBasicContact();
-            
+            int contactId = AddBasicContact().Result.Id;
+            if (contactId > 0)
+            {
+                AddEmailAddresses(contactId);
+            }
            
             //Add Basic contacts
             //Add EmailAddress(s) if Basic contact was successfully added
@@ -760,65 +763,191 @@ namespace ASP.NET_Console_Project
             return 0;
         }
 
-        private int AddBasicContact()
+        private ResultSet<BasicContactModel> AddBasicContact()
         {
-           
-            BasicContactModel basicContactModel = new BasicContactModel();
+            Console.WriteLine("\nAdd Basic Contact\n");
+            BasicContactModel basicContact = new BasicContactModel();
+            ResultSet<BasicContactModel> resultSet = new ResultSet<BasicContactModel>();
+            string firstName = "";
+            string middleName = "";
+            string lastName = "";
+            string firstNameSave = "";
+            string middleNameSave = "";
+            string lastNameSave = "";
+            string answer = "";
 
-            ////input basic contact model
-            Console.WriteLine("\nAdd Basic Contact  -press enter three times to exit- \n");
+            bool finished = false;
+            bool firstNameEntered = false;
+            bool middleNameEntered = false;
+            bool lastNameEntered = false;
 
-          string firstName = "";
-          string middleName = "";
-          string lastName = "";
-          bool finished = false;
-          bool firstNameEntered = false;
-          bool lastNameEntered = false;
-          bool completed = false;
-
-            ///ask user before updating the table to confirm or re-enter  
-          while(!completed)
-          { 
-                while (!firstNameEntered && !finished)
+            // Ask user before updating the table to confirm the data entered - or - re-enter the data
+            do
+            {
+                if (firstNameEntered)
                 {
-                    Console.Write("Enter the Contact's First name");
-                    firstName = Console.ReadLine();
-                    firstName = firstName.Trim();
+                    Console.Write("\n The First Name Is '"
+                        + firstName
+                        + "'. Would You Like To Change It? (Y Or N, Press Enter for no): ");
+                    answer = Console.ReadLine().Trim();
+
+                    if (answer.Equals("y", StringComparison.OrdinalIgnoreCase) ||
+                        answer.Equals("yes", StringComparison.OrdinalIgnoreCase))
+                    {
+                        Console.WriteLine("Enter The Contact's First Name");
+                        Console.WriteLine("Press Spacebar Enter To Erase or Press Enter To Leave Unchanged: ");
+
+                        firstName = Console.ReadLine();
+
+                        // Check for the new first name or erased first name
+                        if (firstName.Length > 0)
+                        {
+                            firstName = firstName.Trim();
+
+                            if (firstName.Length == 0)
+                            {
+                                firstNameEntered = false;
+                            }
+
+                            firstNameSave = firstName;
+                        }
+                        else
+                        {
+                            // First Name Unchanged
+                            firstName = firstNameSave;
+                        }
+
+                    }
+                }
+
+                else
+                {
+                    Console.Write("Enter The Contact's First Name or Press Enter To Leave It Blank: ");
+                    firstName = Console.ReadLine().Trim();
+
                     if (firstName.Length > 0)
                     {
                         firstNameEntered = true;
-                        finished = false;
                     }
-
-                    finished = true;
                 }
-                Console.WriteLine();
-                Console.Write("Enter The Contact's Middle Name: ");
-                middleName = Console.ReadLine();
-                middleName = middleName.Trim();
 
-                finished = false;
-                while (!lastNameEntered && !finished)
+                Console.WriteLine("First Name Is Now: " + (firstNameEntered ? "'" + firstName + "'." : "blank."));
+
+                if (middleNameEntered)
                 {
-                        Console.WriteLine();
-                        Console.Write("Enter The Contact's Last Name: ");
+                    Console.Write("\n The Middle Name Is '"
+                        + middleName
+                        + "'. Would You Like To Change It? (Y Or N, Press Enter for no): ");
+                    answer = Console.ReadLine().Trim();
+
+                    if (answer.Equals("y", StringComparison.OrdinalIgnoreCase) ||
+                        answer.Equals("yes", StringComparison.OrdinalIgnoreCase))
+                    {
+                        Console.WriteLine("Enter The Contact's Middle Name");
+                        Console.WriteLine("Press Spacebar Enter To Erase or Press Enter To Leave Unchanged: ");
+
+                        middleName = Console.ReadLine();
+
+                        // Check for the new first name or erased middle name
+                        if (middleName.Length > 0)
+                        {
+                            middleName = middleName.Trim();
+
+                            if (middleName.Length == 0)
+                            {
+                                middleNameEntered = false;
+                            }
+
+                            middleNameSave = middleName;
+                        }
+                        else
+                        {
+                            // Middle Name Unchanged
+                            middleName = middleNameSave;
+                        }
+
+                    }
+                }
+
+                else
+                {
+                    Console.Write("Enter The Contact's Middle Name or Press Enter To Leave It Blank: ");
+                    middleName = Console.ReadLine().Trim();
+
+                    if (middleName.Length > 0)
+                    {
+                        middleNameEntered = true;
+                    }
+                }
+                Console.WriteLine("Middle Name Is Now: " + (middleNameEntered ? "'" + middleName + "'." : "blank."));
+
+                if (lastNameEntered)
+                {
+                    Console.Write("\n The Last Name Is '"
+                        + lastName
+                        + "'. Would You Like To Change It? (Y Or N, Press Enter for no): ");
+                    answer = Console.ReadLine().Trim();
+
+                    if (answer.Equals("y", StringComparison.OrdinalIgnoreCase) ||
+                        answer.Equals("yes", StringComparison.OrdinalIgnoreCase))
+                    {
+                        Console.WriteLine("Enter The Contact's Last Name");
+                        Console.WriteLine("Press Spacebar Enter To Erase or Press Enter To Leave Unchanged: ");
+
                         lastName = Console.ReadLine();
-                        lastName = lastName.Trim();
-                        Console.WriteLine();
 
+                        // Check for the new first name or erased last name
+                        if (lastName.Length > 0)
+                        {
+                            lastName = lastName.Trim();
 
-                    if (firstName.Length > 0)
+                            if (lastName.Length == 0)
+                            {
+                                lastNameEntered = false;
+                            }
+
+                            lastNameSave = lastName;
+                        }
+                        else
+                        {
+                            // Last Name Unchanged
+                            lastName = lastNameSave;
+                        }
+
+                    }
+                }
+
+                else
+                {
+                    Console.Write("Enter The Contact's Last Name or Press Enter To Leave It Blank: ");
+                    lastName = Console.ReadLine().Trim();
+
+                    if (lastName.Length > 0)
                     {
                         lastNameEntered = true;
                     }
-                        finished = true;
                 }
-                if (firstName.Length > 0 || lastName.Length > 0)
+
+                Console.WriteLine("last Name Is Now: " + (lastNameEntered ? "'" + lastName + "'." : "blank."));
+
+                if (firstNameEntered || lastNameEntered)
                 {
-                        basicContactModel.FirstName = firstName;
-                        basicContactModel.MiddleName = middleName;
-                        basicContactModel.LastName = lastName;
-                        ResultSet<BasicContactModel> resultSet = _contacts.AddBasicContacts(basicContactModel);
+                    Console.Write("\nWould You Like To Make Any Changes? (Yes or No -or- press Enter for no): ");
+                    answer = Console.ReadLine();
+                    answer = answer.Trim();
+
+                    if (answer.Length == 0 ||
+                        answer.Equals("n", StringComparison.OrdinalIgnoreCase) ||
+                        answer.Equals("no", StringComparison.OrdinalIgnoreCase))
+                    {
+
+
+
+                        basicContact.FirstName = firstName;
+                        basicContact.MiddleName = middleName;
+                        basicContact.LastName = lastName;
+                        resultSet = _contacts.AddBasicContacts(basicContact);
+
 
                         if (resultSet.CriticalError || resultSet.LogicalError)
                         {
@@ -832,45 +961,96 @@ namespace ASP.NET_Console_Project
                                     trace.ClassName,
                                     trace.MemberName,
                                     trace.ErrorNumber);
+
                                 Console.WriteLine("Error Messages:");
                                 foreach (string errorMessage in trace.ErrorMessages)
                                 {
                                     Console.WriteLine(errorMessage);
                                 }
+
                                 Console.WriteLine();
                             }
+
+                        }
+
+                        else
+                        {
+                            Console.WriteLine("\nNew Contact With ID: " + basicContact.Id + (firstNameEntered ? " First Name: " + firstName : "") + (middleNameEntered ? ", Middle Name: " + middleName + "," : "") + (lastNameEntered ? " And Last Name: " + lastName : "") + " Added.");
+                        }
+                        finished = true;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("\n Either First or Last Name Must Be Entered");
+
+                    Console.Write("\nWould You Like To Cancel Adding A Contact? (Yes or No -or- press Enter for no): ");
+                    answer = Console.ReadLine();
+                    answer = answer.Trim();
+
+                    if (answer.Equals("y", StringComparison.OrdinalIgnoreCase) ||
+                        answer.Equals("yes", StringComparison.OrdinalIgnoreCase))
+                    {
+                        finished = true;
+                    }
+                }
+            }
+            while (!finished);
+
+            Console.WriteLine();
+
+            return resultSet;
+        }
+
+        private int AddEmailAddresses(int contactId)
+        {
+            EmailAddressModel emailAddressModel = new EmailAddressModel();
+            string emailAddress = "";
+            bool finished = false;
+            bool emailAddressEntered = false;
+
+
+            while (!finished) 
+            {
+                Console.Write("Enter an email address -or- enter 'Enter' to exit");
+                emailAddress = Console.ReadLine();
+                if (emailAddress.Length > 0)
+                {
+
+                    emailAddressEntered = true;
+                    emailAddressModel.EmailAddress = emailAddress;
+                    if (Tools.ValidateEmailAddressCharacters(emailAddress))
+                    {
+                        if(Tools.ValidateEmailAddressCharacters(emailAddress))
+                        {
+                            emailAddressModel.EmailAddress = emailAddress;
+                            ResultSet<int> resultSet = _contacts.AddEmailAddress(emailAddressModel);
                         }
                         else
                         {
-                            Console.WriteLine("{0, -15:S} {1,20:S} {2,20:S}", "First Name", "Middle Name", "Last Name");
-                            Console.WriteLine("{0, -15:S} {1,20:S} {2,20:S}",
-                                "---------",
-                                "-------",
-                                "---------");
+                            Console.Write("invalid email address format");
+                            Console.Write(Tools.InvalidEmailFormat);
 
-
-                        Console.WriteLine("{0, -15:S} {1,20:S} {2,20:S}",
-                                firstName,
-                                middleName,
-                                lastName);
-                            Console.WriteLine();
                         }
+                    }
+                    else
+                    {
+                        Console.Write("invalid email address character");
+                        Console.Write(Tools.InvalidEmailCharacter);
 
+                    }
+                }
+                else
+                {
+                    finished = true;
                 }
 
-                completed = true;
-           }
-            return basicContactModel.Id;
-        }
-
-
-        private int AddEmailAddresses()
-        {
+            }
             return 0;
         }
 
 
-        private int AddPhoneNumber()
+        private int AddPhoneNumber(int contactId)
         {
             return 0;
         }
