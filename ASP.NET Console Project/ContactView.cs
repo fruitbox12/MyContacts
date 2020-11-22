@@ -485,7 +485,7 @@ namespace ASP.NET_Console_Project
         }
         private void SearchContactsByEmail()
         {
-            Console.WriteLine("\nSearch Contact By Email\n");
+            Console.WriteLine("\nSearch A Contact By Email\n");
 
             string email = "";
 
