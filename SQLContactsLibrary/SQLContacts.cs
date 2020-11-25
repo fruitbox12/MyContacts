@@ -237,8 +237,6 @@ namespace SQLContactsLibrary
             if (basicContactModel.FirstName.Length > 0 || basicContactModel.LastName.Length > 0)
             {
 
-            
-
             string sqlStatement = @"INSERT INTO dbo.contacts (first_name, middle_name, last_name)
                                     VALUES (@FirstName,@MiddleName, @LastName);";
 
@@ -271,37 +269,84 @@ namespace SQLContactsLibrary
             return resultSet;
 
         }
-        public ResultSet<int> AddEmailAddress(EmailAddressModel emailAddressModel)
+        public ResultSet<int> AddEmailAddress(int contactId, EmailAddressModel emailAddressModel)
         {
             ResultSet<int> resultSet = new ResultSet<int>();
 
             //Valid Names are not all blank
-            if (emailAddressModel.EmailAddress.Length > 0 )
-            {
 
-                string sqlStatement = @"INSERT INTO dbo.email_addresses (email_address)
+
+            string sqlStatement = @"INSERT INTO dbo.email_addresses (email_address)
                                     VALUES (@EmailAddress);";
 
 
-                ResultSet<int> addResultSet = _dataAccess.Create<EmailAddressModel, dynamic>(sqlStatement,new{EmailAddress = emailAddressModel.EmailAddress});
-            
-            }
-            else
-            {
-                resultSet.LogicalError = true;
-                Trace trace = new Trace();
-                trace.ErrorType = Trace.ErrorTypes.Logical;
-                trace.ClassName = "AddEmailAddress";
-                trace.MemberName = "AddBasicContacts()";
-                trace.ErrorMessages.Add("Error Message: One of 'First Name' or 'Last Name' must be entered");
-                resultSet.Traces.Add(trace);
+            ResultSet<int> emailResultSet = _dataAccess.Create<EmailAddressModel, dynamic>(sqlStatement,
+                                                    new{EmailAddress = emailAddressModel.EmailAddress});
 
+            resultSet.Merge(emailResultSet);
+            resultSet.Result = emailResultSet.Result;
+
+            //for readability check for false you can use !addResultSet.CriticalError
+            if(emailResultSet.CriticalError == false)
+            {
+                ContactEmailModel contactEmailModel = new ContactEmailModel();
+                contactEmailModel.ContactId = contactId;
+                contactEmailModel.EmailId = emailResultSet.Result;
+
+                ResultSet<int> contactEmailResultSet = AddContactEmailAddress(contactEmailModel);
+
+                resultSet.Merge(contactEmailResultSet);
+                resultSet.Result = contactEmailResultSet.Result;
             }
 
             return resultSet;
 
         }
 
+        public ResultSet<int> AddPhoneNumber(int contactId, PhoneNumberModel phoneNumberModel)
+        {
+            ResultSet<int> resultSet = new ResultSet<int>();
+
+            //Valid Names are not all blank
+
+
+            string sqlStatement = @"INSERT INTO dbo.phone_numbers (phone_number)
+                                    VALUES (@PhoneNumber);";
+
+
+            ResultSet<int> phoneNumberResultSet = _dataAccess.Create<PhoneNumberModel, dynamic>(sqlStatement,
+                                                    new { PhoneNumber = phoneNumberModel.PhoneNumber });
+
+            resultSet.Merge(phoneNumberResultSet);
+            resultSet.Result = phoneNumberResultSet.Result;
+
+            //for readability check for false you can use !addResultSet.CriticalError
+            if (phoneNumberResultSet.CriticalError == false)
+            {
+                ContactPhoneNumberModel contactPhoneNumberModel = new ContactPhoneNumberModel();
+                contactPhoneNumberModel.ContactId = contactId;
+                contactPhoneNumberModel.PhoneNumberId = phoneNumberResultSet.Result;
+
+
+               
+            }
+
+            return resultSet;
+
+        }
+        public ResultSet<int> AddContactEmailAddress(ContactEmailModel contactEmailModel)
+        {
+
+            string sqlStatement = @"INSERT INTO dbo.contacts_email_addresses (contact_id, email_id)
+                                    VALUES (@ContactId, @EmailId);";
+
+
+            ResultSet<int> resultSet = _dataAccess.Create<EmailAddressModel, dynamic>(sqlStatement, new { ContactId = contactEmailModel.ContactId,
+                                                                                                            EmailId = contactEmailModel.EmailId
+                                                                                                           });
+            return resultSet;
+
+        }
 
 
 

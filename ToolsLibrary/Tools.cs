@@ -59,5 +59,29 @@ namespace ToolsLibrary
                 return stringBuilder.ToString();
             }
         }
+
+        public static string InvalidPhoneNumberCharacter
+        {
+            get
+            {
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.Append("PhoneNumber containts invalid character(s).\n");
+                stringBuilder.Append("Valid characters: 0-9");
+                return stringBuilder.ToString();
+            }
+        }
+        public static string InvalidPhoneNumberFormat
+        {
+            get
+            {
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.Append("Invalid PhoneNumber format entered. Valid format:\n");
+                stringBuilder.Append("Email userid: at least one character followed by @\n");
+                stringBuilder.Append("Email domain name: at least one character followed by period\n");
+                stringBuilder.Append("Top-level domain name: at least two characters\n");
+                stringBuilder.Append("Minimal example: 909");
+                return stringBuilder.ToString();
+            }
+        }
     }
 }

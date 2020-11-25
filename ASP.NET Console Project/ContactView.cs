@@ -114,24 +114,9 @@ namespace ASP.NET_Console_Project
 
             else if (resultSet.CriticalError || resultSet.LogicalError)
             {
-                Console.WriteLine("{0, -15:S} {1,20:S} {2,20:S} {3,25:S}", "Error Type", "ClassName", "Membername", "ErrorNumber");
+                DisplayTrace(resultSet.Traces);
 
-                foreach (Trace trace in resultSet.Traces)
-                {
-                 
-                    Console.WriteLine("{0, -15:S} {1,20:S} {2,20:S} {3,25:D}", 
-                        trace.ErrorType.ToString(),
-                        trace.ClassName,
-                        trace.MemberName,
-                        trace.ErrorNumber);
-                    Console.WriteLine("Error Messages:");
-                    foreach (string errorMessage in trace.ErrorMessages)
-                    {
-                        Console.WriteLine(errorMessage);
 
-                    }
-                }
-                
             }
             else
             {
@@ -181,23 +166,8 @@ namespace ASP.NET_Console_Project
 
                     else if (resultSet.CriticalError || resultSet.LogicalError)
                     {
-                        Console.WriteLine("{0, -15:S} {1,20:S} {2,20:S} {3,25:S}", "Error Type", "ClassName", "Membername", "ErrorNumber");
+                        DisplayTrace(resultSet.Traces);
 
-                        foreach (Trace trace in resultSet.Traces)
-                        {
-
-                            Console.WriteLine("{0, -15:S} {1,20:S} {2,20:S} {3,25:D}",
-                                trace.ErrorType.ToString(),
-                                trace.ClassName,
-                                trace.MemberName,
-                                trace.ErrorNumber);
-                            Console.WriteLine("Error Messages:");
-                            foreach (string errorMessage in trace.ErrorMessages)
-                            {
-                                Console.WriteLine(errorMessage);
-
-                            }
-                        }
 
                     }
                     else
@@ -213,23 +183,8 @@ namespace ASP.NET_Console_Project
             }
             else if (resultSet.CriticalError || resultSet.LogicalError)
             {
-                Console.WriteLine("{0, -15:S} {1,20:S} {2,20:S} {3,25:S}", "Error Type", "ClassName", "Membername", "ErrorNumber");
+                DisplayTrace(resultSet.Traces);
 
-                foreach (Trace trace in resultSet.Traces)
-                {
-
-                    Console.WriteLine("{0, -15:S} {1,20:S} {2,20:S} {3,25:D}",
-                        trace.ErrorType.ToString(),
-                        trace.ClassName,
-                        trace.MemberName,
-                        trace.ErrorNumber);
-                    Console.WriteLine("Error Messages:");
-                    foreach (string errorMessage in trace.ErrorMessages)
-                    {
-                        Console.WriteLine(errorMessage);
-
-                    }
-                }
 
             }
 
@@ -238,8 +193,6 @@ namespace ASP.NET_Console_Project
                 Console.WriteLine("\nThere" + ((resultSet.Result.Count == 1) ? " is one Contact " : " are " + resultSet.Result.Count + " Contacts ") + "on file");
 
             }
-
-
         }
 
         
@@ -289,23 +242,7 @@ namespace ASP.NET_Console_Project
             }
             else if (resultSet.CriticalError || resultSet.LogicalError)
             {
-                Console.WriteLine("{0, -15:S} {1,20:S} {2,20:S} {3,25:S}", "Error Type", "ClassName", "Membername", "ErrorNumber");
-
-                foreach (Trace trace in resultSet.Traces)
-                {
-
-                    Console.WriteLine("{0, -15:S} {1,20:S} {2,20:S} {3,25:D}",
-                        trace.ErrorType.ToString(),
-                        trace.ClassName,
-                        trace.MemberName,
-                        trace.ErrorNumber);
-                    Console.WriteLine("Error Messages:");
-                    foreach (string errorMessage in trace.ErrorMessages)
-                    {
-                        Console.WriteLine(errorMessage);
-
-                    }
-                }
+                DisplayTrace(resultSet.Traces);
 
             }
 
@@ -368,25 +305,8 @@ namespace ASP.NET_Console_Project
                     }
                     else if (resultSet.CriticalError || resultSet.LogicalError)
                     {
-                        Console.WriteLine("{0, -15:S} {1,20:S} {2,20:S} {3,25:S}", "Error Type", "ClassName", "Membername", "ErrorNumber");
+                        DisplayTrace(resultSet.Traces);
 
-                        foreach (Trace trace in resultSet.Traces)
-                        {
-
-                            Console.WriteLine("{0, -15:S} {1,20:S} {2,20:S} {3,25:D}",
-                                trace.ErrorType.ToString(),
-                                trace.ClassName,
-                                trace.MemberName,
-                                trace.ErrorNumber);
-                            Console.WriteLine("Error Messages:");
-                            foreach (string errorMessage in trace.ErrorMessages)
-                            {
-                                Console.WriteLine(errorMessage);
-
-                            }
-
-                            Console.WriteLine();
-                        }
 
                     }
 
@@ -395,10 +315,6 @@ namespace ASP.NET_Console_Project
                     {
                         Console.WriteLine("\nContact with Id " + contactId + " not found\n");
                     }
-
-
-
-           
 
                 }
 
@@ -447,25 +363,8 @@ namespace ASP.NET_Console_Project
 
                     else if (resultSet.CriticalError || resultSet.LogicalError)
                     {
-                        Console.WriteLine("{0, -15:S} {1,20:S} {2,20:S} {3,25:S}", "Error Type", "ClassName", "Membername", "ErrorNumber");
+                        DisplayTrace(resultSet.Traces);
 
-                        foreach (Trace trace in resultSet.Traces)
-                        {
-
-                            Console.WriteLine("{0, -15:S} {1,20:S} {2,20:S} {3,25:D}",
-                                trace.ErrorType.ToString(),
-                                trace.ClassName,
-                                trace.MemberName,
-                                trace.ErrorNumber);
-                            Console.WriteLine("Error Messages:");
-                            foreach (string errorMessage in trace.ErrorMessages)
-                            {
-                                Console.WriteLine(errorMessage);
-
-                            }
-
-                            Console.WriteLine();
-                        }
 
                     }
 
@@ -519,25 +418,7 @@ namespace ASP.NET_Console_Project
 
                             else if (basicContactResultSet.CriticalError || basicContactResultSet.LogicalError)
                             {
-                                Console.WriteLine("{0, -15:S} {1,20:S} {2,20:S} {3,25:S}", "Error Type", "ClassName", "Membername", "ErrorNumber");
-
-                                foreach (Trace trace in basicContactResultSet.Traces)
-                                {
-
-                                    Console.WriteLine("{0, -15:S} {1,20:S} {2,20:S} {3,25:D}",
-                                        trace.ErrorType.ToString(),
-                                        trace.ClassName,
-                                        trace.MemberName,
-                                        trace.ErrorNumber);
-                                    Console.WriteLine("Error Messages:");
-                                    foreach (string errorMessage in trace.ErrorMessages)
-                                    {
-                                        Console.WriteLine(errorMessage);
-
-                                    }
-
-                                    Console.WriteLine();
-                                }
+                                DisplayTrace(basicContactResultSet.Traces);
 
                             }
                             else
@@ -562,25 +443,8 @@ namespace ASP.NET_Console_Project
                     }
                     else if (emailResultSet.CriticalError || emailResultSet.LogicalError)
                     {
-                        Console.WriteLine("{0, -15:S} {1,20:S} {2,20:S} {3,25:S}", "Error Type", "ClassName", "Membername", "ErrorNumber");
+                        DisplayTrace(emailResultSet.Traces);
 
-                        foreach (Trace trace in emailResultSet.Traces)
-                        {
-
-                            Console.WriteLine("{0, -15:S} {1,20:S} {2,20:S} {3,25:D}",
-                                trace.ErrorType.ToString(),
-                                trace.ClassName,
-                                trace.MemberName,
-                                trace.ErrorNumber);
-                            Console.WriteLine("Error Messages:");
-                            foreach (string errorMessage in trace.ErrorMessages)
-                            {
-                                Console.WriteLine(errorMessage);
-
-                            }
-
-                            Console.WriteLine();
-                        }
                     }
                     else
                     {
@@ -623,43 +487,16 @@ namespace ASP.NET_Console_Project
                             }
                             else if (basicContactResultSet.CriticalError || basicContactResultSet.LogicalError)
                             {
-                                Console.WriteLine("{0, -15:D} {1,15:S} {2,15:S} {3,25:S}", "Error Type", "Class Name", "Member Name", "Error Number");
+                                DisplayTrace(basicContactResultSet.Traces);
 
-                                foreach (Trace trace in basicContactResultSet.Traces)
-                                {
-
-                                    Console.WriteLine("{0, -5:S} {1,15:S} {2,15:S} {3,25:D}", trace.ErrorType.ToString(), trace.ClassName, trace.MemberName, trace.ErrorNumber);
-                                    Console.WriteLine("Error Messages:\n");
-                                    foreach (string errorMessage in trace.ErrorMessages)
-                                    {
-                                        Console.WriteLine(errorMessage);
-                                    }
-                                }
                             }
                         }
                         
                     }
                     else if (phoneResultSet.CriticalError || phoneResultSet.LogicalError)
                     {
-                        Console.WriteLine("{0, -15:S} {1,20:S} {2,20:S} {3,25:S}", "Error Type", "ClassName", "Membername", "ErrorNumber");
+                        DisplayTrace(phoneResultSet.Traces);
 
-                        foreach (Trace trace in phoneResultSet.Traces)
-                        {
-
-                            Console.WriteLine("{0, -15:S} {1,20:S} {2,20:S} {3,25:D}",
-                                trace.ErrorType.ToString(),
-                                trace.ClassName,
-                                trace.MemberName,
-                                trace.ErrorNumber);
-                            Console.WriteLine("Error Messages:");
-                            foreach (string errorMessage in trace.ErrorMessages)
-                            {
-                                Console.WriteLine(errorMessage);
-
-                            }
-
-                            Console.WriteLine();
-                        }
                     }
                     else
                     {
@@ -680,7 +517,8 @@ namespace ASP.NET_Console_Project
             int contactId = AddBasicContact().Result.Id;
             if (contactId > 0)
             {
-                AddEmailAddresses(contactId);
+                AddEmailAddress(contactId);
+                AddPhoneNumber(contactId);
             }
            
             //Add Basic contacts
@@ -721,23 +559,7 @@ namespace ASP.NET_Console_Project
 
                     if (resultSet.CriticalError || resultSet.LogicalError)
                     {
-                        Console.WriteLine("{0, -15:S} {1,20:S} {2,20:S} {3,25:S}", "Error Type", "ClassName", "Membername", "ErrorNumber");
-
-                        foreach (Trace trace in resultSet.Traces)
-                        {
-
-                            Console.WriteLine("{0, -15:S} {1,20:S} {2,20:S} {3,25:D}",
-                                trace.ErrorType.ToString(),
-                                trace.ClassName,
-                                trace.MemberName,
-                                trace.ErrorNumber);
-                            Console.WriteLine("Error Messages:");
-                            foreach (string errorMessage in trace.ErrorMessages)
-                            {
-                                Console.WriteLine(errorMessage);
-                            }
-                            Console.WriteLine();
-                        }
+                        DisplayTrace(resultSet.Traces);
                     }
                     else
                     {
@@ -839,7 +661,6 @@ namespace ASP.NET_Console_Project
                         + middleName
                         + "'. Would You Like To Change It? (Y Or N, Press Enter for no): ");
                     answer = Console.ReadLine().Trim();
-
                     if (answer.Equals("y", StringComparison.OrdinalIgnoreCase) ||
                         answer.Equals("yes", StringComparison.OrdinalIgnoreCase))
                     {
@@ -847,17 +668,14 @@ namespace ASP.NET_Console_Project
                         Console.WriteLine("Press Spacebar Enter To Erase or Press Enter To Leave Unchanged: ");
 
                         middleName = Console.ReadLine();
-
                         // Check for the new first name or erased middle name
                         if (middleName.Length > 0)
                         {
                             middleName = middleName.Trim();
-
                             if (middleName.Length == 0)
                             {
                                 middleNameEntered = false;
                             }
-
                             middleNameSave = middleName;
                         }
                         else
@@ -865,7 +683,6 @@ namespace ASP.NET_Console_Project
                             // Middle Name Unchanged
                             middleName = middleNameSave;
                         }
-
                     }
                 }
 
@@ -895,17 +712,13 @@ namespace ASP.NET_Console_Project
                         Console.WriteLine("Press Spacebar Enter To Erase or Press Enter To Leave Unchanged: ");
 
                         lastName = Console.ReadLine();
-
-                        // Check for the new first name or erased last name
                         if (lastName.Length > 0)
                         {
                             lastName = lastName.Trim();
-
                             if (lastName.Length == 0)
                             {
                                 lastNameEntered = false;
                             }
-
                             lastNameSave = lastName;
                         }
                         else
@@ -927,7 +740,6 @@ namespace ASP.NET_Console_Project
                         lastNameEntered = true;
                     }
                 }
-
                 Console.WriteLine("last Name Is Now: " + (lastNameEntered ? "'" + lastName + "'." : "blank."));
 
                 if (firstNameEntered || lastNameEntered)
@@ -941,8 +753,6 @@ namespace ASP.NET_Console_Project
                         answer.Equals("no", StringComparison.OrdinalIgnoreCase))
                     {
 
-
-
                         basicContact.FirstName = firstName;
                         basicContact.MiddleName = middleName;
                         basicContact.LastName = lastName;
@@ -951,28 +761,9 @@ namespace ASP.NET_Console_Project
 
                         if (resultSet.CriticalError || resultSet.LogicalError)
                         {
-                            Console.WriteLine("{0, -15:S} {1,20:S} {2,20:S} {3,25:S}", "Error Type", "ClassName", "Membername", "ErrorNumber");
-
-                            foreach (Trace trace in resultSet.Traces)
-                            {
-
-                                Console.WriteLine("{0, -15:S} {1,20:S} {2,20:S} {3,25:D}",
-                                    trace.ErrorType.ToString(),
-                                    trace.ClassName,
-                                    trace.MemberName,
-                                    trace.ErrorNumber);
-
-                                Console.WriteLine("Error Messages:");
-                                foreach (string errorMessage in trace.ErrorMessages)
-                                {
-                                    Console.WriteLine(errorMessage);
-                                }
-
-                                Console.WriteLine();
-                            }
+                            DisplayTrace(resultSet.Traces);
 
                         }
-
                         else
                         {
                             Console.WriteLine("\nNew Contact With ID: " + basicContact.Id + (firstNameEntered ? " First Name: " + firstName : "") + (middleNameEntered ? ", Middle Name: " + middleName + "," : "") + (lastNameEntered ? " And Last Name: " + lastName : "") + " Added.");
@@ -1002,57 +793,189 @@ namespace ASP.NET_Console_Project
             return resultSet;
         }
 
-        private int AddEmailAddresses(int contactId)
+        private int AddEmailAddress(int contactId)
         {
             EmailAddressModel emailAddressModel = new EmailAddressModel();
             string emailAddress = "";
+
             bool finished = false;
-            bool emailAddressEntered = false;
+
+            string emailAddressSave = "";
+            string answer;
 
 
-            while (!finished) 
+            while (!finished)
             {
-                Console.Write("Enter an email address -or- enter 'Enter' to exit");
-                emailAddress = Console.ReadLine();
+                Console.Write("Enter The Contact's Email Address Or Press Enter To Exit: ");
+                emailAddress = Console.ReadLine().Trim();
                 if (emailAddress.Length > 0)
                 {
-
-                    emailAddressEntered = true;
-                    emailAddressModel.EmailAddress = emailAddress;
                     if (Tools.ValidateEmailAddressCharacters(emailAddress))
                     {
-                        if(Tools.ValidateEmailAddressCharacters(emailAddress))
+                        if (Tools.ValidateEmailAddressFormat(emailAddress))
                         {
-                            emailAddressModel.EmailAddress = emailAddress;
-                            ResultSet<int> resultSet = _contacts.AddEmailAddress(emailAddressModel);
+                            Console.WriteLine("Would You Like To Change The Email Address? (Y Or N, Press Enter for no): ");
+
+                            answer = Console.ReadLine().Trim();
+
+                            if (answer.Length == 0 ||
+                                answer.Equals("no", StringComparison.OrdinalIgnoreCase) ||
+                            answer.Equals("n", StringComparison.OrdinalIgnoreCase))
+                            {
+                                emailAddressModel.EmailAddress = emailAddress;
+                                ResultSet<int> resultSet = _contacts.AddEmailAddress(contactId, emailAddressModel);
+                                emailAddressModel.Id = resultSet.Result;
+                                if (resultSet.CriticalError || resultSet.LogicalError)
+                                {
+                                    Console.WriteLine("{0, -15:S} {1,20:S} {2,20:S} {3,25:S}", "Error Type", "ClassName", "Membername", "ErrorNumber");
+                                    foreach (Trace trace in resultSet.Traces)
+                                    {
+                                        Console.WriteLine("{0, -15:S} {1,20:S} {2,20:S} {3,25:D}",
+                                            trace.ErrorType.ToString(),
+                                            trace.ClassName,
+                                            trace.MemberName,
+                                            trace.ErrorNumber);
+                                        Console.WriteLine("Error Messages:");
+                                        foreach (string errorMessage in trace.ErrorMessages)
+                                        {
+                                            Console.WriteLine(errorMessage);
+                                        }
+                                        Console.WriteLine();
+                                    }
+                                }
+                                else
+                                {
+                                    Console.WriteLine("\nNew Email Address With Id: " + emailAddressModel.Id + " And Email Address: " + emailAddress + " Added.");
+                                }
+                                Console.WriteLine("Would You Like To Add More Email Addresses? (Yes Or No, Press Enter for no): ");
+                                answer = Console.ReadLine().Trim();
+
+                                if (answer.Length == 0 ||
+                                    answer.Equals("n", StringComparison.OrdinalIgnoreCase)
+                                    || answer.Equals("no", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    finished = true;
+                                }
+                            }
                         }
                         else
                         {
-                            Console.Write("invalid email address format");
-                            Console.Write(Tools.InvalidEmailFormat);
-
+                            Console.WriteLine("Invalid Email Address Format, Correct Format Is " + Tools.InvalidEmailFormat);
                         }
                     }
                     else
                     {
-                        Console.Write("invalid email address character");
-                        Console.Write(Tools.InvalidEmailCharacter);
-
+                        Console.WriteLine("Invalid Email Address Characters, Valid Characters Are " + Tools.InvalidEmailCharacter);
                     }
                 }
                 else
                 {
-                    finished = true;
+                    Console.WriteLine("No Email Address Was Added");
                 }
-
             }
             return 0;
         }
-
-
         private int AddPhoneNumber(int contactId)
         {
+            PhoneNumberModel phoneNumberModel = new PhoneNumberModel();
+            string phoneNumber = "";
+
+            bool finished = false;
+
+            string phoneNumberSave = "";
+            string answer;
+
+
+            while (!finished)
+            {
+                Console.Write("Enter The Contact's Phone Number Or Press Enter To Exit: ");
+                phoneNumber = Console.ReadLine().Trim();
+                if (phoneNumber.Length > 0)
+                {
+                    if (Tools.ValidatePhoneNumber(phoneNumber))
+                    {
+                        if (Tools.ValidatePhoneNumber(phoneNumber))
+                        {
+                            Console.WriteLine("Would You Like To Change The Phone Number? (Y Or N, Press Enter for no): ");
+
+                            answer = Console.ReadLine().Trim();
+
+                            if (answer.Length == 0 ||
+                                answer.Equals("no", StringComparison.OrdinalIgnoreCase) ||
+                            answer.Equals("n", StringComparison.OrdinalIgnoreCase))
+                            {
+                                phoneNumberModel.PhoneNumber = phoneNumber;
+                                ResultSet<int> resultSet = _contacts.AddPhoneNumber(contactId, phoneNumberModel);
+                                phoneNumberModel.Id = resultSet.Result;
+                                if (resultSet.CriticalError || resultSet.LogicalError)
+                                {
+                                    Console.WriteLine("{0, -15:S} {1,20:S} {2,20:S} {3,25:S}", "Error Type", "ClassName", "Membername", "ErrorNumber");
+                                    foreach (Trace trace in resultSet.Traces)
+                                    {
+                                        Console.WriteLine("{0, -15:S} {1,20:S} {2,20:S} {3,25:D}",
+                                            trace.ErrorType.ToString(),
+                                            trace.ClassName,
+                                            trace.MemberName,
+                                            trace.ErrorNumber);
+                                        Console.WriteLine("Error Messages:");
+                                        foreach (string errorMessage in trace.ErrorMessages)
+                                        {
+                                            Console.WriteLine(errorMessage);
+                                        }
+                                        Console.WriteLine();
+                                    }
+                                }
+                                else
+                                {
+                                    Console.WriteLine("\nNew phoneNumber With Id: " + phoneNumberModel.Id + " And phoneNumber: " + phoneNumber + " Added.");
+                                }
+                                Console.WriteLine("Would You Like To Add More phoneNumber? (Yes Or No, Press Enter for no): ");
+                                answer = Console.ReadLine().Trim();
+
+                                if (answer.Length == 0 ||
+                                    answer.Equals("n", StringComparison.OrdinalIgnoreCase)
+                                    || answer.Equals("no", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    finished = true;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Invalid phoneNumber Format, Correct Format Is " + Tools.InvalidPhoneNumberCharacter);
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid phoneNumber Characters, Valid Characters Are " + Tools.InvalidPhoneNumberCharacter);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("No phoneNumber Was Added");
+                }
+            }
             return 0;
+        }
+        private void DisplayTrace(List<Trace> traces)
+        {
+            if (traces.Count > 0)
+            Console.WriteLine("{0, -15:S} {1,20:S} {2,20:S} {3,25:S}", "Error Type", "ClassName", "Membername", "ErrorNumber");
+
+            foreach (Trace trace in traces)
+            {
+                Console.WriteLine("{0, -15:S} {1,20:S} {2,20:S} {3,25:D}",
+                    trace.ErrorType.ToString(),
+                    trace.ClassName,
+                    trace.MemberName,
+                    trace.ErrorNumber);
+                Console.WriteLine("Error Messages:");
+                foreach (string errorMessage in trace.ErrorMessages)
+                {
+                    Console.WriteLine(errorMessage);
+                }
+                Console.WriteLine();
+            }
         }
     }
 }
