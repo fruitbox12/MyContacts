@@ -107,10 +107,22 @@ namespace DataAccessLibrary
             }
             catch (SqlException e)
             {
-                resultSet.CriticalError = true;
                 resultSet.Result = 0;
 
                 Trace trace = new Trace();
+
+                if(e.Number == 2601)
+                {
+
+                    trace.ErrorType = Trace.ErrorTypes.Logical;
+                }
+                else
+                {
+                    resultSet.CriticalError = true;
+
+                    trace.ErrorType = Trace.ErrorTypes.Critical;
+                }
+
                 trace.ErrorType = Trace.ErrorTypes.Critical;
                 trace.ClassName = "SQLDataAccess";
                 trace.MemberName = "Create()";
@@ -118,7 +130,8 @@ namespace DataAccessLibrary
                 if (e.Errors.Count > 0)
                 {
                     trace.ErrorNumber = e.Errors[0].Number;
-
+                    trace.addErrorMessage(e.Message);
+                    /*
                     foreach (SqlError error in e.Errors)
                     {
                         trace.ErrorMessages.Add("Error Message: " + error.Message);
@@ -127,7 +140,7 @@ namespace DataAccessLibrary
                         trace.ErrorMessages.Add("Source: " + error.Source);
                         trace.ErrorMessages.Add("Procedure: " + error.Procedure);
                     }
-
+                    */
                 }
                 resultSet.AddTrace(trace);
             }

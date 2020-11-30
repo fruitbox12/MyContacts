@@ -5,5 +5,7 @@
     {
         string CurrentConnectionName { get; set; }
         string CurrentConnectionString { get; set; }
+        public bool Trace { get; set; }
+
     }
 }

@@ -23,10 +23,8 @@ namespace DataAccessLibrary
         public List<Trace> Traces { get; set; } = new List<Trace>();
 
         //Logcial erros are falglged by idb
-        public bool CriticalError { get; set; }
-        public int CriticalErrors { get; set; }
-        public bool LogicalError { get; set; }
-        public bool LogicalErrors {get; set;}
+        public bool CriticalError { get; set; } = false;
+        public bool LogicalError { get; set; } = false;
     //uses interface to pass generic instance, get its tytpe
 
         public void Merge(object fromResultSet)

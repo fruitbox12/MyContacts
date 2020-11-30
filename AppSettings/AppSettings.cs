@@ -19,10 +19,18 @@ namespace Settings
 
         public string CurrentConnectionString { get; set; }
 
+        public bool Trace { get; set; } = false;
+
         private void ReadJsonSettings()
         {
             CurrentConnectionName = _configuration.GetSection("ConnectionStrings").GetSection("CurrentConnectionName").Value;
             CurrentConnectionString = _configuration.GetSection("ConnectionStrings").GetSection(CurrentConnectionName).Value;
+            string trace = _configuration.GetSection("Trace").Value;
+
+            if (trace.Equals("True", StringComparison.OrdinalIgnoreCase)) {
+                Trace = true;
+            }
+
         }
 
     }

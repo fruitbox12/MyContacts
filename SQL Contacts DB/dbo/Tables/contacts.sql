@@ -10,5 +10,4 @@ CREATE TABLE [dbo].[contacts]
 
 GO
 
-CREATE UNIQUE INDEX [IX_contacts_contact] ON [dbo].[contacts] ([last_name], [first_name])
 

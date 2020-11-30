@@ -827,21 +827,7 @@ namespace ASP.NET_Console_Project
                                 emailAddressModel.Id = resultSet.Result;
                                 if (resultSet.CriticalError || resultSet.LogicalError)
                                 {
-                                    Console.WriteLine("{0, -15:S} {1,20:S} {2,20:S} {3,25:S}", "Error Type", "ClassName", "Membername", "ErrorNumber");
-                                    foreach (Trace trace in resultSet.Traces)
-                                    {
-                                        Console.WriteLine("{0, -15:S} {1,20:S} {2,20:S} {3,25:D}",
-                                            trace.ErrorType.ToString(),
-                                            trace.ClassName,
-                                            trace.MemberName,
-                                            trace.ErrorNumber);
-                                        Console.WriteLine("Error Messages:");
-                                        foreach (string errorMessage in trace.ErrorMessages)
-                                        {
-                                            Console.WriteLine(errorMessage);
-                                        }
-                                        Console.WriteLine();
-                                    }
+                                    DisplayTrace(resultSet.Traces);
                                 }
                                 else
                                 {
@@ -909,21 +895,7 @@ namespace ASP.NET_Console_Project
                                 phoneNumberModel.Id = resultSet.Result;
                                 if (resultSet.CriticalError || resultSet.LogicalError)
                                 {
-                                    Console.WriteLine("{0, -15:S} {1,20:S} {2,20:S} {3,25:S}", "Error Type", "ClassName", "Membername", "ErrorNumber");
-                                    foreach (Trace trace in resultSet.Traces)
-                                    {
-                                        Console.WriteLine("{0, -15:S} {1,20:S} {2,20:S} {3,25:D}",
-                                            trace.ErrorType.ToString(),
-                                            trace.ClassName,
-                                            trace.MemberName,
-                                            trace.ErrorNumber);
-                                        Console.WriteLine("Error Messages:");
-                                        foreach (string errorMessage in trace.ErrorMessages)
-                                        {
-                                            Console.WriteLine(errorMessage);
-                                        }
-                                        Console.WriteLine();
-                                    }
+                                    DisplayTrace(resultSet.Traces);
                                 }
                                 else
                                 {
@@ -959,22 +931,27 @@ namespace ASP.NET_Console_Project
         }
         private void DisplayTrace(List<Trace> traces)
         {
-            if (traces.Count > 0)
-            Console.WriteLine("{0, -15:S} {1,20:S} {2,20:S} {3,25:S}", "Error Type", "ClassName", "Membername", "ErrorNumber");
-
-            foreach (Trace trace in traces)
-            {
-                Console.WriteLine("{0, -15:S} {1,20:S} {2,20:S} {3,25:D}",
-                    trace.ErrorType.ToString(),
-                    trace.ClassName,
-                    trace.MemberName,
-                    trace.ErrorNumber);
-                Console.WriteLine("Error Messages:");
-                foreach (string errorMessage in trace.ErrorMessages)
-                {
-                    Console.WriteLine(errorMessage);
+            if (_appSettings.Trace) 
+            { 
+            
+                if (traces.Count > 0)
+                Console.WriteLine("{0, -15:S} {1,20:S} {2,20:S} {3,25:S}", "Error Type", "ClassName", "Membername", "ErrorNumber");
+                { 
+                    foreach (Trace trace in traces)
+                    {
+                        Console.WriteLine("{0, -15:S} {1,20:S} {2,20:S} {3,25:D}",
+                            trace.ErrorType.ToString(),
+                            trace.ClassName,
+                            trace.MemberName,
+                            trace.ErrorNumber);
+                        Console.WriteLine("Error Messages:");
+                        foreach (string errorMessage in trace.ErrorMessages)
+                        {
+                            Console.WriteLine(errorMessage);
+                        }
+                        Console.WriteLine();
+                    }
                 }
-                Console.WriteLine();
             }
         }
     }

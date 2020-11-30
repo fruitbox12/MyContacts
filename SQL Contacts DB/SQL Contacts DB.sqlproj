@@ -58,6 +58,7 @@
     <Folder Include="Properties" />
     <Folder Include="dbo" />
     <Folder Include="dbo\Tables" />
+    <Folder Include="Scripts\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\phone_numbers.sql" />
@@ -68,5 +69,8 @@
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SQL Contacts DB.refactorlog" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Scripts\SQL Contacts DB.publish.xml" />
   </ItemGroup>
 </Project>
