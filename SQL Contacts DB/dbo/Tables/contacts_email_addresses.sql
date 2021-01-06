@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[contacts_email_addresses]
 (
-	[id] INT NOT NULL PRIMARY KEY, 
+	[id] INT NOT NULL PRIMARY KEY IDENTITY, 
     [contact_id] INT NOT NULL, 
     [email_id] INT NOT NULL, 
 

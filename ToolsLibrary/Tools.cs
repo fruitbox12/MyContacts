@@ -23,17 +23,16 @@ namespace ToolsLibrary
         }
         public static string NormalizePhoneNumber(string phoneNumber)
         {
-            phoneNumber = Regex.Replace(phoneNumber, @"[^0-9]+", "");
+            return Regex.Replace(phoneNumber, @"[^0-9]+", "");
 
 
-            return phoneNumber;
         }
-        public static bool ValidatePhoneNumber(string phoneNumber)
+        public static bool ValidatePhoneNumberCharacters(string phoneNumber)
         {
-            phoneNumber = Regex.Replace(phoneNumber, @"[^0-9]+", "");
+            //Currently only valid for US Phone Numbers
+            return  NormalizePhoneNumber(phoneNumber).Length == 10; 
 
 
-            return phoneNumber.Length == 10;
         }
 
         public static string InvalidEmailCharacter
@@ -41,8 +40,8 @@ namespace ToolsLibrary
             get
             {
                 StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.Append("Email Address containts invalid character(s).\n");
-                stringBuilder.Append("Valid characters: underscore a-z A-Z 0-9 dash period @");
+                stringBuilder.Append("\nEmail Address containts invalid character(s).\n");
+                stringBuilder.Append("Valid characters: underscore a-z A-Z 0-9 dash period @\n");
                 return stringBuilder.ToString();
             }
         }
@@ -51,7 +50,7 @@ namespace ToolsLibrary
             get
             {
                 StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.Append("Invalid Email Address format entered. Valid format:\n");
+                stringBuilder.Append("\nInvalid Email Address format entered. Valid format:\n");
                 stringBuilder.Append("Email userid: at least one character followed by @\n");
                 stringBuilder.Append("Email domain name: at least one character followed by period\n");
                 stringBuilder.Append("Top-level domain name: at least two characters\n");
@@ -60,12 +59,14 @@ namespace ToolsLibrary
             }
         }
 
-        public static string InvalidPhoneNumberCharacter
+        public static string InvalidPhoneNumberCharacters
         {
             get
             {
                 StringBuilder stringBuilder = new StringBuilder();
                 stringBuilder.Append("PhoneNumber containts invalid character(s).\n");
+                stringBuilder.Append("PhoneNumber containts invalid character(s).\n");
+
                 stringBuilder.Append("Valid characters: 0-9");
                 return stringBuilder.ToString();
             }
@@ -75,11 +76,11 @@ namespace ToolsLibrary
             get
             {
                 StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.Append("Invalid PhoneNumber format entered. Valid format:\n");
+                stringBuilder.Append("\nInvalid PhoneNumber format entered. Valid format:\n");
                 stringBuilder.Append("Email userid: at least one character followed by @\n");
                 stringBuilder.Append("Email domain name: at least one character followed by period\n");
                 stringBuilder.Append("Top-level domain name: at least two characters\n");
-                stringBuilder.Append("Minimal example: 909");
+                stringBuilder.Append("Minimal example: 909\n");
                 return stringBuilder.ToString();
             }
         }

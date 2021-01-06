@@ -27,7 +27,7 @@ namespace Settings
             CurrentConnectionString = _configuration.GetSection("ConnectionStrings").GetSection(CurrentConnectionName).Value;
             string trace = _configuration.GetSection("Trace").Value;
 
-            if (trace.Equals("True", StringComparison.OrdinalIgnoreCase)) {
+            if (trace.Equals("true", StringComparison.OrdinalIgnoreCase)) {
                 Trace = true;
             }
 

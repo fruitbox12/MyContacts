@@ -10,4 +10,4 @@ CREATE TABLE [dbo].[contacts]
 
 GO
 
-
+CREATE INDEX [IX_contacts_Column] ON [dbo].[contacts] ([last_name], [first_name])

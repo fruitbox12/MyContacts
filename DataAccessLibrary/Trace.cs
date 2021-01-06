@@ -7,16 +7,12 @@ namespace DataAccessLibrary
 {
     public class Trace
     {
-
-        public int ErrorNumbers { get; set; }
-        public List<string> ErrorMessages { get; set; } = new List<string>();
-
-        public string ClassName { get; set; }
-        public string MemberName { get; set; }
-
-        public enum ErrorTypes { Critical, Logical};
-        public ErrorTypes ErrorType { get; set; }
-        public int ErrorNumber { get; internal set; }
+        public enum ErrorTypes { Critical, Logical, None };
+        public ErrorTypes ErrorType { get; set; } = ErrorTypes.None;
+        public String ClassName { get; set; } = "";
+        public String MemberName { get; set; } = "";
+        public int ErrorNumber { get; set; }
+        public List<String> ErrorMessages { get; set; } = new List<String>();
 
         public void addErrorMessage(string errrorMessage)
         {

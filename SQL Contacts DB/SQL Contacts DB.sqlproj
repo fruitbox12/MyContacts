@@ -72,5 +72,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\SQL Contacts DB.publish.xml" />
+    <None Include="SQL Contacts DB.publish.xml" />
   </ItemGroup>
 </Project>

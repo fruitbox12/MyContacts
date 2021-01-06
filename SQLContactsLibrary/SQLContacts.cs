@@ -97,11 +97,6 @@ namespace SQLContactsLibrary
             }
 
 
-
-
-
-
-
             return resultSet;
         }
 
@@ -116,10 +111,8 @@ namespace SQLContactsLibrary
             {
                 ContactModel contactModel = new ContactModel();
                 contactModel.BasicContactModel = basicContactModel;
-
                 ResultSet<List<EmailAddressModel>> emailResultSet = GetEmailAddresses(basicContactModel.Id);
                 contactModel.EmailAddress = emailResultSet.Result;
-
                 ResultSet<List<PhoneNumberModel>> phoneResultSet = GetPhoneNumbers(basicContactModel.Id);
                 contactModel.PhoneNumber = phoneResultSet.Result;
 
@@ -145,7 +138,6 @@ namespace SQLContactsLibrary
                                     FROM dbo.contacts 
                                     WHERE first_name LIKE @firstName AND last_name LIKE @lastName;";
 
-
             return _dataAccess.ReadList<BasicContactModel, dynamic>(sqlStatement, new { FirstName = "%" + firstName + "%", LastName = "%" + lastName + "%" });
         }
 
@@ -157,25 +149,86 @@ namespace SQLContactsLibrary
             string sqlStatement = @"SELECT id AS Id, email_address AS EmailAddress
                                     FROM dbo.email_addresses                           
                                     WHERE email_address LIKE @emailAddress;";
-
-
-
-
-
             return _dataAccess.ReadList<EmailAddressModel, dynamic>(sqlStatement, new { EmailAddress = "%" + emailAddress + "%" });
         }
 
         public ResultSet<BasicContactModel> GetBasicContactByEmail(int emailAddressId)
         {
-
-            // if no id for basiccontantmodel is not found, null will be returned
-            string sqlStatement;
-            sqlStatement = @"SELECT first_name AS FirstName, middle_name AS MiddleName, last_name AS LastName
-                                    FROM dbo.contacts AS c
-                                    INNER JOIN dbo.contacts_email_addresses AS ce
+            // Must use column name aliases equivalent to the contanct model
+            string sqlStatement = @"SELECT c.id as Id, c.first_name as FirstName, c.middle_name as MiddleName, c.last_name as LastName
+                                    From dbo.contacts as c
+                                    Inner Join dbo.contacts_email_addresses as ce
                                     ON ce.contact_id = c.id
                                     WHERE ce.email_id = @Id;";
-            return _dataAccess.Read<BasicContactModel, dynamic>(sqlStatement, new { Id = emailAddressId });
+
+
+            ResultSet<BasicContactModel> resultSet = _dataAccess.Read<BasicContactModel, dynamic>(sqlStatement, new { Id = emailAddressId });
+
+            // IF not found indicates a dnagling email address aka one not associated with contact bc FK relatiosnhip with contacts email table
+            // Not sql error, not critical then
+            // Flag as a critical error
+            if (resultSet.CriticalError == false && resultSet.LogicalError == false && resultSet.Result.Id == 0)
+            {
+                // Do not flag a ciritical error yetm wait until we try to fix it
+                resultSet.ErrorMessage = "Email Address with Id " +
+                                            +emailAddressId
+                                            + " in the Email Address table is not associated with any contact.";
+
+                Trace trace = new Trace();
+                trace.ErrorType = Trace.ErrorTypes.Critical;
+                trace.ClassName = "GetBasicContactByEmail";
+                trace.MemberName = "SqlContacts";
+                trace.ErrorMessages.Add("Email Address with Id "
+                                        + emailAddressId
+                                        + " in the Email Addresses table is not associated with any Contact.");
+                trace.ErrorMessages.Add("Email Address with Id "
+                                        + emailAddressId
+                                        + " not found on the Contacts Email Addresses FK table.");
+                resultSet.AddTrace(trace);
+
+
+                sqlStatement = @"DELETE FROM dbo.email_addresses where id = @EmailAddressId;";
+
+                ResultSet<int> emailResultSet = _dataAccess.Delete<int, dynamic>(sqlStatement, new { EmailAddressId = emailAddressId });
+                resultSet.Merge(emailResultSet);
+
+                trace = new Trace();
+                trace.ClassName = "GetBasicContactByEmail()";
+                trace.MemberName = "SqlContacts";
+
+                // Do not set the basiccontactmodel  result id to zero, it will confuse view. Not basiccontactmodel id, what delete returns
+                // same thing, less readable if (emailResultSet.CriticalError == false && emailResultSet.LogicalError == true && emailResultSet.Result == 0)
+                //if ((emailResultSet.CriticalError == true || emailResultSet.LogicalError == true) && emailResultSet.Result == 0)            
+
+                if (emailResultSet.Result == 1)
+                {
+                    // successful delete
+                    resultSet.ErrorMessage = "Email Address with Id "
+                                        + emailAddressId
+                                        + " in the Email Addresses table is not associated with any Contact, successfully deleted";
+                    trace.ErrorMessages.Add("Email Address with Id "
+                                        + emailAddressId
+                                        + " in the Email Addresses table is not associated with any Contact, successfully deleted");
+                    resultSet.AddTrace(trace);
+                }
+                else
+                {
+                    // unseccessful delete
+                    resultSet.CriticalError = true;
+                    resultSet.ErrorMessage = "Email Address with Id "
+                                        + emailAddressId
+                                        + " in the Email Addresses table is not associated with any Contact, unable to be deleted";
+                    trace.ErrorType = Trace.ErrorTypes.Critical;
+                    trace.addErrorMessage("Email Address with Id "
+                                        + emailAddressId
+                                        + " in the Email Addresses table is not associated with any Contact, unable to be deleted");
+                    resultSet.AddTrace(trace);
+
+                }
+            }
+
+
+            return resultSet;
 
         }
 
@@ -212,19 +265,106 @@ namespace SQLContactsLibrary
                                 FROM dbo.phone_numbers                            
                                 WHERE phone_number LIKE @phoneNumber;";
 
-
-
             return _dataAccess.ReadList<PhoneNumberModel, dynamic>(sqlStatement, new { PhoneNumber = "%" + phoneNumber + "%" });
         }
+        public ResultSet<BasicContactModel> UpdateBasicContacts(BasicContactModel basicContactModel)
+        {
+            string sqlStatement = @"UPDATE dbo.contacts
+                                    SET first_name = @FirstName, middle_name = @MiddleName, last_name = @LastName
+                                    WHERE id = @Id;";
 
+            return _dataAccess.Read<BasicContactModel, dynamic>(sqlStatement, new { Id = basicContactModel.Id, FirstName = basicContactModel.FirstName, MiddleName = basicContactModel.MiddleName, LastName = basicContactModel.LastName });
+        }
+        public bool ValidateContactId(int contactId)
+        {
+            bool IdFound = false;
+            string sqlStatement = @"SELECT id FROM dbo.contacts WHERE id = @Id;";
+
+            ResultSet<int> id = _dataAccess.Read<int, dynamic>(sqlStatement, new { Id = contactId });
+
+            if (id.Result > 0)
+            {
+                IdFound = true;
+            }
+
+            return IdFound;
+        }
         public ResultSet<BasicContactModel> GetBasicContactByPhoneNumber(int phoneNumberId)
         {
-            string sqlStatement = @"SELECT first_name AS FirstName, middle_name AS MiddleName, last_name as LastName 
-                                    FROM dbo.contacts AS c
-                                    INNER JOIN dbo.contacts_phone_numbers  AS cp
+            string sqlStatement = @"SELECT c.id as Id, c.first_name as FirstName, c.middle_name as MiddleName, c.last_name as LastName
+                                    From dbo.contacts as c
+                                    Inner Join dbo.contacts_phone_numbers as cp
                                     ON cp.contact_id = c.id
                                     WHERE cp.phone_number_id = @Id;";
-            return _dataAccess.Read<BasicContactModel, dynamic>(sqlStatement, new { Id = phoneNumberId });
+
+            ResultSet<BasicContactModel> resultSet = _dataAccess.Read<BasicContactModel, dynamic>(sqlStatement, new { Id = phoneNumberId });
+
+            // IF not found indicates a dnagling Phone Number aka one not associated with contact bc FK relatiosnhip with contacts Phone Number table
+            // Not sql error, not critical then
+            // Flag as a critical error
+            if (resultSet.CriticalError == false && resultSet.LogicalError == false && resultSet.Result.Id == 0)
+            {
+                // Do not flag a ciritical error yetm wait until we try to fix it
+                resultSet.ErrorMessage = "Phone Number with Id " +
+                                            +phoneNumberId
+                                            + " in the Phone Number table is not associated with any contact.";
+
+                Trace trace = new Trace();
+                trace.ErrorType = Trace.ErrorTypes.Critical;
+                trace.ClassName = "GetBasicContactByPhoneNumber()";
+                trace.MemberName = "SqlContacts";
+                trace.ErrorMessages.Add("Phone Number with Id "
+                                        + phoneNumberId
+                                        + " in the Phone Number table is not associated with any Contact.");
+                trace.ErrorMessages.Add("Phone Number with Id "
+                                        + phoneNumberId
+                                        + " not found on the Contacts Phone Number FK table.");
+                resultSet.AddTrace(trace);
+
+
+                sqlStatement = @"DELETE FROM dbo.phone_numbers where id = @PhoneNumberId;";
+
+                ResultSet<int> phoneNumberResultSet = _dataAccess.Delete<int, dynamic>(sqlStatement, new { PhoneNumberId = phoneNumberId });
+                resultSet.Merge(phoneNumberResultSet);
+
+                trace = new Trace();
+                trace.ClassName = "GetBasicContactByPhoneNumber()";
+                trace.MemberName = "SqlContacts";
+
+                // Do not set the basiccontactmodel  result id to zero, it will confuse view. Not basiccontactmodel id, what delete returns
+                // same thing, less readable if (phoneNumberResultSet.CriticalError == false && phoneNumberResultSet.LogicalError == true && phoneNumberResultSet.Result == 0)
+                //if ((phoneNumberResultSet.CriticalError == true || phoneNumberResultSet.LogicalError == true) && phoneNumberResultSet.Result == 0)            
+
+                if (phoneNumberResultSet.Result == 1)
+                {
+                    // successful delete
+
+                    resultSet.ErrorMessage = "Phone Number with Id "
+                                        + phoneNumberId
+                                        + " in the Phone Number table is not associated with any Contact, successfully deleted";
+                    trace.ErrorMessages.Add("Phone Number with Id "
+                                        + phoneNumberId
+                                        + " in the Phone Number table is not associated with any Contact, successfully deleted");
+                    resultSet.AddTrace(trace);
+                }
+                else
+                {
+                    // unseccessful delete
+                    resultSet.CriticalError = true;
+                    resultSet.ErrorMessage = "Phone Number with Id "
+                                        + phoneNumberId
+                                        + " in the Phone Number table is not associated with any Contact, unable to be deleted";
+                    trace.ErrorType = Trace.ErrorTypes.Critical;
+                    trace.addErrorMessage("Phone Number with Id "
+                                        + phoneNumberId
+                                        + " in the Phone Number table is not associated with any Contact, unable to be deleted");
+                    resultSet.AddTrace(trace);
+
+                }
+            }
+
+
+            return resultSet;
 
         }
 
@@ -239,7 +379,6 @@ namespace SQLContactsLibrary
 
             string sqlStatement = @"INSERT INTO dbo.contacts (first_name, middle_name, last_name)
                                     VALUES (@FirstName,@MiddleName, @LastName);";
-
 
             ResultSet<int> createResultSet = _dataAccess.Create<BasicContactModel, dynamic>(sqlStatement,
                                                                                         new
@@ -263,7 +402,6 @@ namespace SQLContactsLibrary
                 trace.MemberName = "AddBasicContacts()";
                 trace.ErrorMessages.Add("Error Message: One of 'First Name' or 'Last Name' must be entered");
                 resultSet.Traces.Add(trace);
-
             }
 
             return resultSet;
@@ -274,7 +412,6 @@ namespace SQLContactsLibrary
             ResultSet<int> resultSet = new ResultSet<int>();
 
             //Valid Names are not all blank
-
 
             string sqlStatement = @"INSERT INTO dbo.email_addresses (email_address)
                                     VALUES (@EmailAddress);";
@@ -287,7 +424,7 @@ namespace SQLContactsLibrary
             resultSet.Result = emailResultSet.Result;
 
             //for readability check for false you can use !addResultSet.CriticalError
-            if(emailResultSet.CriticalError == false)
+            if (emailResultSet.CriticalError == false && emailResultSet.LogicalError == false)
             {
                 ContactEmailModel contactEmailModel = new ContactEmailModel();
                 contactEmailModel.ContactId = contactId;
@@ -298,8 +435,24 @@ namespace SQLContactsLibrary
                 resultSet.Merge(contactEmailResultSet);
                 resultSet.Result = contactEmailResultSet.Result;
             }
-
+            else if (resultSet.ErrorNumber == 2601)
+            {
+                resultSet.ErrorMessage = "'" + "\nEmail Address" + emailAddressModel.EmailAddress + " is in use";
+            }
             return resultSet;
+            /* else
+             {
+
+
+                  sqlStatement = @"DELETE FROM dbo.email_addresses 
+                                     WHERE contact_id = @ContactId and email_id = @EmailId;";
+
+                 ResultSet<int> deleteResultSet = _dataAccess.Delete<EmailAddressModel, dynamic>(sqlStatement,
+                                                   new { EmailAddress = emailAddressModel.EmailAddress });
+                 resultSet.Merge(deleteResultSet);
+                 resultSet.Result = deleteResultSet.Result;
+             }
+            */
 
         }
 
@@ -320,17 +473,24 @@ namespace SQLContactsLibrary
             resultSet.Merge(phoneNumberResultSet);
             resultSet.Result = phoneNumberResultSet.Result;
 
+       
+
             //for readability check for false you can use !addResultSet.CriticalError
-            if (phoneNumberResultSet.CriticalError == false)
+            if (phoneNumberResultSet.CriticalError == false && phoneNumberResultSet.LogicalError == false)
             {
                 ContactPhoneNumberModel contactPhoneNumberModel = new ContactPhoneNumberModel();
                 contactPhoneNumberModel.ContactId = contactId;
                 contactPhoneNumberModel.PhoneNumberId = phoneNumberResultSet.Result;
 
+                ResultSet<int> contactPhoneNumberResultSet = AddContactPhoneNumber(contactPhoneNumberModel);
 
-               
+                resultSet.Merge(contactPhoneNumberResultSet);
+                resultSet.Result = contactPhoneNumberResultSet.Result;
             }
-
+            else if (resultSet.ErrorNumber == 2601)
+            {
+                resultSet.ErrorMessage = "'" + "\nPhone Number" + phoneNumberModel.PhoneNumber + " is in use";
+            }
             return resultSet;
 
         }
@@ -349,7 +509,21 @@ namespace SQLContactsLibrary
         }
 
 
+        public ResultSet<int> AddContactPhoneNumber(ContactPhoneNumberModel contactPhoneNumberModel)
+        {
 
+            string sqlStatement = @"INSERT INTO dbo.contacts_phone_numbers (contact_id, phone_number_id)
+                                    VALUES (@ContactId, @PhoneNumberId);";
+
+
+            ResultSet<int> resultSet = _dataAccess.Create<PhoneNumberModel, dynamic>(sqlStatement, new
+            {
+                ContactId = contactPhoneNumberModel.ContactId,
+                PhoneNumberId = contactPhoneNumberModel.PhoneNumberId
+            });
+            return resultSet;
+
+        }
 
 
 

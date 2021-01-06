@@ -9,8 +9,7 @@ namespace SQLContactsLibrary.Models
     {
 
         public int Id { get; set; }
-        [Required]
-        [EmailAddress]
+ 
         public string EmailAddress { get; set; } = "";
     }
 }

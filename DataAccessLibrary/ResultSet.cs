@@ -25,7 +25,11 @@ namespace DataAccessLibrary
         //Logcial erros are falglged by idb
         public bool CriticalError { get; set; } = false;
         public bool LogicalError { get; set; } = false;
-    //uses interface to pass generic instance, get its tytpe
+
+        public int ErrorNumber { get; set; }
+
+        public string ErrorMessage { get; set; } = "";
+        //uses interface to pass generic instance, get its tytpe
 
         public void Merge(object fromResultSet)
         {
@@ -33,6 +37,9 @@ namespace DataAccessLibrary
 
             CriticalError = CriticalError || (bool)fromObjectType.GetProperty("CriticalError").GetValue(fromResultSet);
             LogicalError = LogicalError || (bool)fromObjectType.GetProperty("LogicalError").GetValue(fromResultSet);
+            //cast to int from bool
+            ErrorNumber = (int)fromObjectType.GetProperty("ErrorNumber").GetValue(fromResultSet);
+            ErrorMessage = (string)fromObjectType.GetProperty("ErrorMessage").GetValue(fromResultSet);
 
             //First in last out
             Traces.InsertRange(0, (List<Trace>)fromObjectType.GetProperty("Traces").GetValue(fromResultSet));

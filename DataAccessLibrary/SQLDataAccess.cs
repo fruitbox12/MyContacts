@@ -43,11 +43,16 @@ namespace DataAccessLibrary
         {
             return DapperRead<T, U>(sqlStatement, parameters);
         }
+        public ResultSet<int> Delete<T, U>(string sqlStatement, U parameters)
+        {
+            return DapperDelete<T, U>(sqlStatement, parameters);
+        }
 
         public ResultSet<List<T>> ReadList<T, U>(string sqlStatement, U parameters)
         {
             return DapperReadList<T, U>(sqlStatement, parameters);
         }
+
 
         // Dapper Micro ORM
         private ResultSet<int> DapperCount(string sqlStatement)
@@ -70,21 +75,16 @@ namespace DataAccessLibrary
                 trace.ErrorType = Trace.ErrorTypes.Critical;
                 trace.ClassName = "SQLDataAccess";
                 trace.MemberName = "Count()";
-
-                if (e.Errors.Count > 0)
-                {
-                    trace.ErrorNumber = e.Errors[0].Number;
+                trace.ErrorNumber = e.Errors[0].Number;
 
                     foreach (SqlError error in e.Errors)
                     {
                         trace.ErrorMessages.Add("Error Message: " + error.Message);
                         trace.ErrorMessages.Add("Error Number: " + error.Number);
-                        trace.ErrorMessages.Add("Line Number: " + error.LineNumber);
-                        trace.ErrorMessages.Add("Source: " + error.Source);
-                        trace.ErrorMessages.Add("Procedure: " + error.Procedure);
+
                     }
 
-                }
+               
                 resultSet.AddTrace(trace);
             }
 
@@ -93,7 +93,7 @@ namespace DataAccessLibrary
         //  int 
         // returns 0 
         // areturns sql error number 
-        private ResultSet<int> DapperCreate<T, U>(string sqlStatement, U parameters)
+        ResultSet<int> DapperCreate<T, U>(string sqlStatement, U parameters)
         {
             ResultSet<int> resultSet = new ResultSet<int>();
 
@@ -105,48 +105,40 @@ namespace DataAccessLibrary
                     resultSet.Result = connection.Query<int>(sqlStatement, parameters).SingleOrDefault();
                 }
             }
-            catch (SqlException e)
+            catch (SqlException ex)
             {
                 resultSet.Result = 0;
+                resultSet.ErrorNumber = ex.Number;
+                resultSet.ErrorMessage = ex.Message;
 
                 Trace trace = new Trace();
-
-                if(e.Number == 2601)
+                trace.ClassName = "SQLDataAccess";
+                trace.MemberName = "Create()";
+                if (ex.Number == 2601)
                 {
-
+                    resultSet.LogicalError = true;
                     trace.ErrorType = Trace.ErrorTypes.Logical;
                 }
                 else
                 {
                     resultSet.CriticalError = true;
-
                     trace.ErrorType = Trace.ErrorTypes.Critical;
                 }
-
-                trace.ErrorType = Trace.ErrorTypes.Critical;
-                trace.ClassName = "SQLDataAccess";
-                trace.MemberName = "Create()";
-
-                if (e.Errors.Count > 0)
-                {
-                    trace.ErrorNumber = e.Errors[0].Number;
-                    trace.addErrorMessage(e.Message);
-                    /*
-                    foreach (SqlError error in e.Errors)
+              
+                    trace.ErrorNumber = ex.Number;
+                    trace.addErrorMessage(ex.Message);
+                  
+                    foreach (SqlError error in ex.Errors)
                     {
                         trace.ErrorMessages.Add("Error Message: " + error.Message);
                         trace.ErrorMessages.Add("Error Number: " + error.Number);
-                        trace.ErrorMessages.Add("Line Number: " + error.LineNumber);
-                        trace.ErrorMessages.Add("Source: " + error.Source);
-                        trace.ErrorMessages.Add("Procedure: " + error.Procedure);
+                      
                     }
-                    */
-                }
-                resultSet.AddTrace(trace);
+                    resultSet.AddTrace(trace);
+
             }
 
             return resultSet;
-
         }
 
         private ResultSet<List<T>> DapperReadList<T, U>(string sqlStatement, U parameters)
@@ -168,22 +160,17 @@ namespace DataAccessLibrary
                 trace.ErrorType = Trace.ErrorTypes.Critical;
                 trace.ClassName = "SQLDataAccess";
                 trace.MemberName = "ReadList()";
+                resultSet.ErrorNumber = ex.Number;
+                resultSet.ErrorMessage = ex.Message;
 
-                if (ex.Errors.Count > 0)
+                foreach (SqlError error in ex.Errors)
                 {
-                    trace.ErrorNumber = ex.Errors[0].Number;
-
-                    foreach (SqlError error in ex.Errors)
-                    {
-                        trace.ErrorMessages.Add("Error Message: " + error.Message);
-                        trace.ErrorMessages.Add("Error Number: " + error.Number);
-                        trace.ErrorMessages.Add("Line Number: " + error.LineNumber);
-                        trace.ErrorMessages.Add("Source: " + error.Source);
-                        trace.ErrorMessages.Add("Procedure: " + error.Procedure);
-                    }
-
+                trace.ErrorMessages.Add("Error Message: " + error.Message);
+                trace.ErrorMessages.Add("Error Number: " + error.Number);
+                
                 }
-                resultSet.AddTrace(trace);
+                    resultSet.AddTrace(trace);
+
             }
 
             return resultSet;
@@ -199,6 +186,7 @@ namespace DataAccessLibrary
                 using (IDbConnection connection = new SqlConnection(_appSettings.CurrentConnectionString))
                 {
                     resultSet.Result = connection.Query<T>(sqlStatement, parameters).FirstOrDefault();
+
                     if (resultSet.Result is null)
                     {
                         resultSet.Result = (T)Activator.CreateInstance(typeof(T));
@@ -209,26 +197,23 @@ namespace DataAccessLibrary
             {
                 resultSet.CriticalError = true;
                 resultSet.Result = (T)Activator.CreateInstance(typeof(T));
+                resultSet.ErrorNumber = e.Number;
+                resultSet.ErrorMessage = e.Message;
                 Trace trace = new Trace();
                 trace.ErrorType = Trace.ErrorTypes.Critical;
-                trace.ClassName = "Read()";
-                trace.MemberName = "Count()";
+                trace.ClassName = "SQLDataAccess()";
+                trace.MemberName = "Read()";
+             
+               
 
-                if (e.Errors.Count > 0)
+                foreach (SqlError error in e.Errors)
                 {
-                    trace.ErrorNumber = e.Errors[0].Number;
 
-                    foreach (SqlError error in e.Errors)
-                    {
-                        trace.ErrorMessages.Add("Error Message: " + error.Message);
-                        trace.ErrorMessages.Add("Error Number: " + error.Number);
-                        trace.ErrorMessages.Add("Line Number: " + error.LineNumber);
-                        trace.ErrorMessages.Add("Source: " + error.Source);
-                        trace.ErrorMessages.Add("Procedure: " + error.Procedure);
-                    }
-
+                    trace.ErrorMessages.Add("Error Message: " + error.Message);
+                    trace.ErrorMessages.Add("Error Number: " + error.Number);
+                  
                 }
-                resultSet.AddTrace(trace);
+                    resultSet.AddTrace(trace);
             }
 
             return resultSet;
@@ -245,6 +230,46 @@ namespace DataAccessLibrary
 
             connection = config.GetConnectionString(connectionString);
             return connection;
+        }
+        //Result 0 unsuccessful, 1 suncuessful
+        private ResultSet<int> DapperDelete<T, U>(string sqlStatement, U parameters)
+        {
+            ResultSet<int> resultSet = new ResultSet<int>();
+
+            
+            try
+            {
+                using (IDbConnection connection = new SqlConnection(_appSettings.CurrentConnectionString))
+                {
+                    resultSet.Result = connection.Execute(sqlStatement, parameters);
+                }
+            }
+            catch (SqlException ex)
+            {
+                resultSet.CriticalError = true;
+                resultSet.Result = 0;
+
+                Trace trace = new Trace();
+
+                trace.ErrorType = Trace.ErrorTypes.Critical;
+                trace.ClassName = "SQLDataAccess";
+                trace.MemberName = "Delete()";
+                resultSet.ErrorNumber = ex.Number;
+                resultSet.ErrorMessage = ex.Message;
+
+
+                foreach (SqlError error in ex.Errors)
+                    {
+                        trace.ErrorMessages.Add("Error Message: " + error.Message);
+                        trace.ErrorMessages.Add("Error Number: " + error.Number);
+         
+                    }
+
+                resultSet.AddTrace(trace);
+            }
+
+            return resultSet;
+
         }
     }
 }

@@ -23,6 +23,7 @@ namespace SQLContactsLibrary
         ResultSet<List<PhoneNumberModel>> SearchPhoneNumbers(string phoneNumber);
         ResultSet<int> AddEmailAddress(int contactId, EmailAddressModel emailAddressModel);
         ResultSet<int> AddPhoneNumber(int contactId, PhoneNumberModel phoneNumberModel);
-
+        public bool ValidateContactId(int contactId);
+        ResultSet<BasicContactModel> UpdateBasicContacts(BasicContactModel basicContactModel);
     }
 }
